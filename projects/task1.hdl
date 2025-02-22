@@ -1,0 +1,18 @@
+CHIP Counter {
+    IN inc, reset;
+    OUT out[16];
+
+    PARTS:
+    // Counter register
+    Register(in=next, load=inc, out=curr);
+    
+    // Increment logic
+    Inc16(in=curr, out=nextVal);
+
+    // Reset logic
+    Mux16(a=nextVal, b=0, sel=reset, out=next);
+
+    // Output
+    out=curr;
+}
+
