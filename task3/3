@@ -1,0 +1,22 @@
+CHIP MultiDisplayCounter {
+    IN inc, reset;
+    OUT DigitA[7], DigitB[7];
+
+    PARTS:
+    // 8-bit register to store the counter value
+    Register(in=next, load=inc, out=curr);
+
+    // Increment logic
+    Inc16(in=curr, out=nextVal);
+
+    // Reset logic
+    Mux16(a=nextVal, b=0, sel=reset, out=next);
+
+    // Tens place (higher 4 bits)
+    SevenSegmentDecoder(in=curr[7..4], outA=DigitA[0], outB=DigitA[1], outC=DigitA[2],
+                        outD=DigitA[3], outE=DigitA[4], outF=DigitA[5], outG=DigitA[6]);
+
+    // Ones place (lower 4 bits)
+    SevenSegmentDecoder(in=curr[3..0], outA=DigitB[0], outB=DigitB[1], outC=DigitB[2],
+                        outD=DigitB[3], outE=DigitB[4], outF=DigitB[5], outG=DigitB[6]);
+}

@@ -1,0 +1,17 @@
+CHIP Counter {
+    IN inc, reset;
+    OUT out[16];
+
+    PARTS:
+    // 16-bit register to store the counter value
+    Register(in=next, load=inc, out=curr);
+
+    // Incrementer to add 1 to the current value
+    Inc16(in=curr, out=nextVal);
+
+    // Multiplexer to handle reset logic
+    Mux16(a=nextVal, b=0, sel=reset, out=next);
+
+    // Output the counter value
+    out=curr;
+}
